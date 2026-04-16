@@ -1,5 +1,5 @@
 # 💫 About Me:
-I'm currently working on Airoma, the newest social media that uses Augmented reality to make going outside to better our health. <br>I am fascinated with very niche algorithms and cryptography<br>I use React Native, Java, Swift, Python, Neo4j, and Firebase
+I'm currently working on[ Vovy.ai](www.vovy.ai) - the duolingo for vibe coding!
 
 
 ## 🌐 Socials:
