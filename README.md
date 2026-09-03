@@ -10,7 +10,7 @@
 ```
 
 ```math
-\small c_i \equiv p_i + k_i \pmod{10} \qquad k = \operatorname{SHA256}(s \mathbin\Vert i) \bmod 10
+\small c_i \equiv p_i + k_i \pmod{10} \qquad k = \mathrm{SHA256}(s \,\|\, i) \bmod 10
 ```
 
 <sub>180 d survey · 15 emitters · regenerated nightly</sub>

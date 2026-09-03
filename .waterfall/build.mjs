@@ -28,7 +28,9 @@ function identBlocks(data, cfg) {
   // *{n}{c} column-repeat spec, so the columns are written out.
   let out = "\n```math\n\\begin{array}{" + "c".repeat(per) + "}\n" + rows + "\n\\end{array}\n```\n";
   if (cfg.ident.showFormula) {
-    out += "\n```math\n\\small c_i \\equiv p_i + k_i \\pmod{10} \\qquad k = \\operatorname{SHA256}(s \\mathbin\\Vert i) \\bmod 10\n```\n";
+    // GitHub restricts KaTeX's macro set beyond stock KaTeX: \operatorname is
+    // rejected outright. \mathrm is accepted and renders identically here.
+    out += "\n```math\n\\small c_i \\equiv p_i + k_i \\pmod{10} \\qquad k = \\mathrm{SHA256}(s \\,\\|\\, i) \\bmod 10\n```\n";
   }
   return { out, count: gs.length, seed, text };
 }

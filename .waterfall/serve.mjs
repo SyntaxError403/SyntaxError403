@@ -76,8 +76,14 @@ const page = (body, note) => `<!doctype html><meta charset="utf-8"><title>commit
     if (typeof katex === "undefined") { blocks.forEach(el => el.classList.add("math-fallback")); return; }
     blocks.forEach((el) => {
       const src = el.textContent;
-      try { katex.render(src, el, { displayMode: true, throwOnError: false }); }
-      catch { el.classList.add("math-fallback"); el.textContent = src; }
+      try {
+        // GitHub disallows some macros stock KaTeX permits (\operatorname among
+        // them). Reject them here too, so the preview fails the same way.
+        const banned = src.match(/\\(operatorname|includegraphics|def|newcommand|renewcommand)\b/);
+        if (banned) throw new Error(`GitHub disallows the macro: ${banned[1]}`);
+        katex.render(src, el, { displayMode: true, throwOnError: true });
+      }
+      catch (err) { el.classList.add("math-fallback"); el.textContent = `${src}\n\n^ ${err.message}`; }
     });
   });
 </script>`;
