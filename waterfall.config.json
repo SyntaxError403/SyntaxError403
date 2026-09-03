@@ -2,18 +2,36 @@
   "days": 180,
   "source": "git",
   "scanRoot": "/Users/serrano/Documents/Vibes",
-  "exclude": ["commit-waterfall", "profile-readme", "profile-deploy"],
+  "exclude": [
+    "commit-waterfall",
+    "profile-readme",
+    "profile-deploy"
+  ],
   "minEmitters": 8,
   "palette": "sdrpp",
-  "emitters": { "anonymize": true },
+  "emitters": {
+    "anonymize": true
+  },
   "timeAxis": [
-    { "days": 7, "px": 8 },
-    { "days": 23, "px": 3 },
-    { "days": 150, "px": 1.4 }
+    {
+      "days": 7,
+      "px": 8
+    },
+    {
+      "days": 23,
+      "px": 3
+    },
+    {
+      "days": 150,
+      "px": 1.4
+    }
   ],
   "ident": {
     "enabled": true,
-    "text": "Eli Serrano, CTO / Co Founder @ Vovy AI | NEW LOC: ({added}+, {removed}-) | x: @Syntax_Serrano"
+    "text": "Eli Serrano, CTO / Co Founder @ Vovy AI | NEW LOC: ({added}+, {removed}-) | x: @Syntax_Serrano | eli@vovy.ai"
   },
-  "output": { "svg": "console.svg", "readme": "README.md" }
+  "output": {
+    "svg": "console.svg",
+    "readme": "README.md"
+  }
 }
