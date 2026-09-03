@@ -5,7 +5,6 @@
   "includePrivate": true,
   "minEmitters": 8,
   "repos": [
-    "jsaltel/vcodinator",
     "Vovy-AI/vovy-desktop",
     "Vovy-AI/vovy-web",
     "Vovy-AI/vovy-ext",
@@ -25,15 +24,29 @@
     "Airoma-Co/Airoma-App"
   ],
   "palette": "sdrpp",
-  "emitters": { "anonymize": true },
+  "emitters": {
+    "anonymize": true
+  },
   "timeAxis": [
-    { "days": 7, "px": 8 },
-    { "days": 23, "px": 3 },
-    { "days": 150, "px": 1.4 }
+    {
+      "days": 7,
+      "px": 8
+    },
+    {
+      "days": 23,
+      "px": 3
+    },
+    {
+      "days": 150,
+      "px": 1.4
+    }
   ],
   "ident": {
     "enabled": true,
     "text": "Eli Serrano, CTO / Co Founder @ Vovy AI | NEW LOC: ({added}+, {removed}-) | x: @Syntax_Serrano"
   },
-  "output": { "svg": "console.svg", "readme": "README.md" }
+  "output": {
+    "svg": "console.svg",
+    "readme": "README.md"
+  }
 }
