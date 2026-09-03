@@ -45,7 +45,24 @@ export async function scanGitHub(cfg, token) {
     return out;
   }
 
-  const all = await paged(`/user/repos?affiliation=owner,collaborator,organization_member&per_page=100&sort=pushed`);
+  // An explicit list beats enumeration: /user/repos only returns what the token
+  // can see, and a fine-grained PAT sees no organisation repo the org has not
+  // approved, and no repo owned by another user at all.
+  let all;
+  if (cfg.repos.length) {
+    all = [];
+    for (const full of cfg.repos) {
+      const { data } = await gh(`/repos/${full}`);
+      if (!data || !data.full_name) {
+        console.warn(`  cannot read ${full} - token lacks access, or it does not exist`);
+        continue;
+      }
+      all.push(data);
+    }
+  } else {
+    all = await paged(`/user/repos?affiliation=owner,collaborator,organization_member&per_page=100&sort=pushed`);
+  }
+
   const candidates = all.filter((r) => {
     if (cfg.exclude.includes(r.name) || cfg.exclude.includes(r.full_name)) return false;
     if (!cfg.includePrivate && r.private) return false;
@@ -78,7 +95,10 @@ export async function scanGitHub(cfg, token) {
   if (cfg.signal.metric === "lines") {
     console.warn('  note: signal.metric "lines" needs per-commit stats, which the API only returns one commit at a time; falling back to commit counts');
   }
-  console.log(`  ${all.length} repos visible, ${repos.length} emitters, ${calls} API calls`);
+  console.log(`  ${all.length} repos visible, ${candidates.length} in window, ${repos.length} emitters, ${calls} API calls`);
+  if (repos.length && repos.length < candidates.length / 2) {
+    console.warn("  note: many candidate repos yielded no commits for this author - check that the token can read them");
+  }
 
   return {
     generated: Math.floor(Date.now() / 1000), days: cfg.days, repos,

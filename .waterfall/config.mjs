@@ -12,7 +12,9 @@ export const DEFAULTS = {
   user: "",                     // for source "github": account to attribute commits to
   includePrivate: true,         // requires a token; names are never published
   exclude: [],                  // repo names to skip entirely
+  repos: [],                    // explicit "owner/name" list; empty = enumerate
   minCommits: 1,                // ignore emitters quieter than this
+  minEmitters: 0,               // refuse to publish a sweep thinner than this (0 = off)
 
   // --- how emitters are identified ---
   emitters: {
@@ -93,6 +95,9 @@ export function validate(c) {
   if (!Number.isFinite(c.days) || c.days < 1) fail("days must be a positive number");
   if (!["git", "github"].includes(c.source)) fail(`source must be "git" or "github", got ${JSON.stringify(c.source)}`);
   if (c.source === "github" && !c.user) fail('source "github" requires "user"');
+  if (!Number.isFinite(c.minEmitters) || c.minEmitters < 0) fail("minEmitters must be >= 0");
+  if (!Array.isArray(c.repos)) fail("repos must be an array of \"owner/name\" strings");
+  for (const r of c.repos) if (!/^[^/]+\/[^/]+$/.test(r)) fail(`repos entry must be "owner/name", got ${JSON.stringify(r)}`);
   if (c.band.hi <= c.band.lo) fail("band.hi must exceed band.lo");
   if (c.signal.dbFloor >= 0) fail("signal.dbFloor must be negative");
   if (!["commits", "lines"].includes(c.signal.metric)) fail('signal.metric must be "commits" or "lines"');

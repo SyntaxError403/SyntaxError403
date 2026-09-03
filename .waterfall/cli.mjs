@@ -58,6 +58,14 @@ async function scan(cfg) {
   writeFileSync(DATA, JSON.stringify(data, null, 2));
   const events = data.repos.reduce((s, r) => s + r.total, 0);
   console.log(`scanned ${data.repos.length} emitters, ${events} events over ${cfg.days} d`);
+  // A sweep that suddenly sees almost nothing usually means the token lost
+  // access, not that the work stopped. Fail rather than publish a hollow page
+  // over a good one.
+  if (cfg.minEmitters && data.repos.length < cfg.minEmitters) {
+    throw new Error(`sweep found ${data.repos.length} emitters, expected at least ${cfg.minEmitters} - ` +
+      `refusing to publish. Check the token can still read your repositories, ` +
+      `or lower minEmitters if this is genuine.`);
+  }
   if (data.loc?.added) console.log(`net lines since ${data.loc.baseline}: +${data.loc.added} / -${data.loc.removed}`);
   return data;
 }
