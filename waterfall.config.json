@@ -28,7 +28,8 @@
   ],
   "ident": {
     "enabled": true,
-    "text": "Eli Serrano, CTO / Co Founder @ Vovy AI | NEW LOC: ({added}+, {removed}-) | x: @Syntax_Serrano | eli@vovy.ai"
+    "text": "Eli Serrano, CTO / Co Founder @ Vovy AI | vovy.ai | NEW LOC: ({added}+, {removed}-) | x: @Syntax_Serrano | eli@vovy.ai",
+    "perRow": 10
   },
   "output": {
     "svg": "console.svg",

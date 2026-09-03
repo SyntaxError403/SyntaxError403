@@ -101,9 +101,10 @@ try {
       mkdirSync(".github/workflows", { recursive: true });
       writeFileSync(".github/workflows/waterfall.yml", WORKFLOW);
 
-      // The scan cache holds real repository names, including private ones.
-      // Committing it would defeat the whole point of anonymised designators.
-      const IGNORE = [".waterfall-data.json", ".waterfall-state.json"];
+      // The scan cache holds real repository names, including private ones, and
+      // the local overlay holds anything deliberately unpublished. Committing
+      // either would defeat the point.
+      const IGNORE = [".waterfall-data.json", ".waterfall-state.json", "waterfall.local.json"];
       const current = existsSync(".gitignore") ? readFileSync(".gitignore", "utf8") : "";
       const missing = IGNORE.filter((l) => !current.split("\n").includes(l));
       if (missing.length) {

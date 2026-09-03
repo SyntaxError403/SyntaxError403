@@ -2,3 +2,6 @@
 .waterfall-data.json
 .waterfall-state.json
 node_modules/
+
+# holds the ident payload - never commit
+waterfall.local.json

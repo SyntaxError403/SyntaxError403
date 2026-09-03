@@ -67,6 +67,7 @@ export const DEFAULTS = {
     text: "",
     groupSize: 5,
     perRow: 9,
+    payload: "",                // {payload} token - keep this in waterfall.local.json
     seed: "",                   // empty = derived from the busiest emitter's HEAD
     showFormula: true,
   },
@@ -132,15 +133,26 @@ export function resolveBands(c) {
   return bands;
 }
 
-export function load(path = process.env.WATERFALL_CONFIG || "waterfall.config.json") {
-  let user = {};
-  if (existsSync(path)) {
-    try {
-      user = JSON.parse(readFileSync(path, "utf8"));
-    } catch (err) {
-      fail(`${path} is not valid JSON - ${err.message}`);
-    }
+function readJson(path) {
+  try {
+    return JSON.parse(readFileSync(path, "utf8"));
+  } catch (err) {
+    fail(`${path} is not valid JSON - ${err.message}`);
   }
+}
+
+export function load(path = process.env.WATERFALL_CONFIG || "waterfall.config.json") {
+  let user = existsSync(path) ? readJson(path) : {};
+
+  // Local overlay, merged last and never committed. Anything that must not be
+  // published - an ident payload, a fixed seed - belongs here rather than in
+  // the config that ships with the repository.
+  // waterfall.config.json -> waterfall.local.json;  foo.json -> foo.local.json
+  const localPath = process.env.WATERFALL_LOCAL || path.replace(/(\.config)?\.json$/, ".local.json");
+  if (localPath !== path && existsSync(localPath)) {
+    user = merge(user, readJson(localPath), "", []);
+  }
+
   const unknown = [];
   const merged = merge(DEFAULTS, user, "", unknown);
   if (unknown.length) {
