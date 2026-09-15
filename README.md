@@ -1,12 +1,12 @@
-<img src="console.svg" width="100%" alt="Wideband survey: 21 emitters over 180 days">
+<img src="console.svg" width="100%" alt="Wideband survey: 24 emitters over 180 days">
 
 ```math
 \begin{array}{cccccccccc}
 39951 & 97601 & 75805 & 73950 & 29199 & 16245 & 49270 & 21608 & 09770 & 17578 \\
 67464 & 27231 & 96628 & 04958 & 76127 & 02323 & 99397 & 98998 & 90098 & 23118 \\
-44792 & 77734 & 78332 & 47447 & 67746 & 48170 & 98956 & 41355 & 90907 & 75147 \\
-04653 & 71703 & 82545 & 63578 & 01596 & 76994 & 76242 & 37751 & 51695 & 18354 \\
-59046 & 02005 & 44259 & 02622 & 98451 & 61095
+44792 & 77734 & 78332 & 47447 & 67745 & 28169 & 99916 & 41355 & 02987 & 56041 \\
+60019 & 13121 & 40992 & 04167 & 17308 & 08662 & 62372 & 36064 & 52549 & 74759 \\
+66910 & 60798 & 51280 & 29020
 \end{array}
 ```
 
@@ -14,4 +14,4 @@
 \small c_i \equiv p_i + k_i \pmod{10} \qquad k = \mathrm{SHA256}(s \,\|\, i) \bmod 10
 ```
 
-<sub>180 d survey · 21 emitters · regenerated nightly</sub>
+<sub>180 d survey · 24 emitters · regenerated nightly</sub>
