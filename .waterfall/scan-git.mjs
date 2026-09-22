@@ -31,11 +31,34 @@ export function scanGit(cfg, statePath = ".waterfall-state.json") {
   let locAdded = 0, locRemoved = 0;
   const repos = [];
 
+  // A git worktree shares its parent clone's history, and a second clone of
+  // the same remote is the same project too. Either would show up as a twin
+  // emitter with an identical stream, so each project is scanned once: the
+  // primary clone (.git is a directory) wins over its worktrees.
+  const candidates = [];
   for (const name of readdirSync(root)) {
     if (cfg.exclude.includes(name)) continue;
     const dir = join(root, name);
     try { if (!statSync(dir).isDirectory()) continue; } catch { continue; }
-    if (!existsSync(join(dir, ".git"))) continue;
+    const dotGit = join(dir, ".git");
+    if (!existsSync(dotGit)) continue;
+    let worktree = false;
+    try { worktree = statSync(dotGit).isFile(); } catch {}
+    candidates.push({ name, dir, worktree });
+  }
+  candidates.sort((a, b) => (a.worktree - b.worktree) || a.name.localeCompare(b.name));
+
+  const seen = new Set();
+  for (const { name, dir } of candidates) {
+    const keys = [];
+    try { keys.push("common:" + resolve(dir, sh(`git -C "${dir}" rev-parse --git-common-dir`).trim())); } catch {}
+    try {
+      const url = sh(`git -C "${dir}" remote get-url origin 2>/dev/null`).trim()
+        .toLowerCase().replace(/\.git$/, "").replace(/\/+$/, "");
+      if (url) keys.push("remote:" + url);
+    } catch {}
+    if (keys.some((k) => seen.has(k))) continue;
+    for (const k of keys) seen.add(k);
 
     // Per-commit line counts are only worth the diff cost when actually used.
     const fmt = wantLines ? '--format=%x1e%at --shortstat' : '--format=%at';
